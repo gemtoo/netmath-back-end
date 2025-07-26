@@ -1,0 +1,8 @@
+/Dockerfile
+/docker-compose.yml
+/deploy-docker-compose.template
+/.gitlab-ci.yml
+/.git
+/.gitignore
+/target
+/README.md
