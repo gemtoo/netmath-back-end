@@ -1,5 +1,5 @@
-use tracing_subscriber::EnvFilter;
 use tracing::info;
+use tracing_subscriber::EnvFilter;
 
 pub fn init() {
     let filter = EnvFilter::new("netmath-back-end=trace");
