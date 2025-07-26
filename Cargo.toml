@@ -1,0 +1,21 @@
+[package]
+name = "netmath-back-end"
+version = "0.1.0"
+edition = "2024"
+
+[profile.dev]
+strip = true
+opt-level = 0
+codegen-units = 256
+
+[profile.release]
+strip = true
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+
+[dependencies]
+actix-web = "4.0"
+actix-cors = "0.7.0"
+serde = { version = "1.0", features = ["derive"] }
