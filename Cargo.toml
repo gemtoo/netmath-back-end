@@ -16,6 +16,9 @@ codegen-units = 1
 panic = "abort"
 
 [dependencies]
-actix-web = "4.0"
-actix-cors = "0.7.0"
+actix-web = "4.11"
+actix-cors = "0.7.1"
 serde = { version = "1.0", features = ["derive"] }
+tracing = { version = "0.1.41", features = ["attributes"] }
+tracing-subscriber = { version = "0.3.19", features = ["fmt", "env-filter"] }
+log = "0.4.27"
