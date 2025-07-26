@@ -44,20 +44,26 @@ async fn calculate(req: web::Json<CalcRequest>) -> HttpResponse {
     }
 }
 
+// Add this OPTIONS handler
+#[actix_web::options("/api")]
+async fn handle_options() -> HttpResponse {
+    HttpResponse::Ok().finish()
+}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     tracing::init();
     HttpServer::new(|| {
-        // Create CORS middleware inside the app factory closure
         let cors = Cors::default()
-            .allow_any_origin() // Allow all origins (for development)
+            .allow_any_origin()
             .allowed_methods(vec!["POST"])
             .allowed_headers(vec![http::header::CONTENT_TYPE])
             .max_age(3600);
 
         App::new()
-            //.wrap(cors)
+            .wrap(cors)
             .service(calculate)
+            .service(handle_options) // Register the OPTIONS handler
     })
     .bind("0.0.0.0:8081")?
     .run()
