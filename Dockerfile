@@ -1,7 +1,7 @@
-FROM rust:1.88-alpine AS chef
+FROM rust:1.88-bookworm AS chef
 # Default build profile is dev
 ARG BUILD_PROFILE=dev
-RUN apk add --no-cache ca-certificates musl-dev
+RUN apt update && apt install -y ca-certificates
 RUN cargo install cargo-chef --locked
 
 FROM chef AS planner
@@ -16,6 +16,7 @@ RUN cargo chef cook --profile ${BUILD_PROFILE} --locked --recipe-path recipe.jso
 COPY . .
 RUN cargo install --profile ${BUILD_PROFILE} --locked --path .
 
-FROM alpine:latest AS runtime
+FROM debian:bookworm-slim AS runtime
+RUN apt update && apt install -y subnetcalc
 COPY --from=builder /usr/local/cargo/bin/netmath-back-end /usr/bin/
 ENTRYPOINT [ "netmath-back-end" ]

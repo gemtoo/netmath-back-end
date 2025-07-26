@@ -1,14 +1,19 @@
+#[macro_use]
+extern crate log;
 // backend/src/main.rs
+mod tracing;
 use actix_cors::Cors;
 use actix_web::{post, web, App, HttpServer, HttpResponse, http};
 use std::process::Command;
+use ::tracing::{Instrument, debug, error, info, warn};
 
-#[derive(serde::Deserialize)]
+#[derive(serde::Deserialize, Debug)]
 struct CalcRequest {
     subnet: String,
 }
 
-#[post("/calculate")]
+#[::tracing::instrument]
+#[post("/api")]
 async fn calculate(req: web::Json<CalcRequest>) -> HttpResponse {
     let output = Command::new("subnetcalc")
         .arg(&req.subnet)
@@ -41,6 +46,7 @@ async fn calculate(req: web::Json<CalcRequest>) -> HttpResponse {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    tracing::init();
     HttpServer::new(|| {
         // Create CORS middleware inside the app factory closure
         let cors = Cors::default()
@@ -50,7 +56,7 @@ async fn main() -> std::io::Result<()> {
             .max_age(3600);
 
         App::new()
-            .wrap(cors)
+            //.wrap(cors)
             .service(calculate)
     })
     .bind("0.0.0.0:8081")?
