@@ -43,7 +43,7 @@ async fn calculate(req: web::Json<CalcRequest>) -> HttpResponse {
                         .body(processed)
                 }
                 Err(e) => {
-                    HttpResponse::InternalServerError().body(format!("Command failed: {}", e))
+                    HttpResponse::UnprocessableEntity().body(format!("Command failed: {}.", e))
                 }
             }
         }
