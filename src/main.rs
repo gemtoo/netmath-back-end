@@ -48,7 +48,7 @@ async fn calculate(req: web::Json<CalcRequest>) -> HttpResponse {
             }
         }
         false => {
-            HttpResponse::Forbidden().body("This pattern is restricted.")
+            HttpResponse::UnprocessableEntity().body("This pattern is restricted.")
         }
     }
 }
